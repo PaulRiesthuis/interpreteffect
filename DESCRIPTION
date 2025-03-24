@@ -1,0 +1,17 @@
+Package: interpreteffect
+Title: Helps interpreting effect size for common experimental designs
+Version: 0.0.0.9000
+Authors@R: 
+    person("Paul", "Riesthuis", , "paul.riesthuis@kuleuven.be", role = c("aut", "cre"))
+Description: The package is a Shiny App that helps researchers interpret their effect sizes
+License: CC BY 4.0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    ggplot2,
+    margins,
+    pROC,
+    shiny,
+    shinydashboard,
+    ThemePark
