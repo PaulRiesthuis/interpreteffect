@@ -389,11 +389,11 @@ server <- function(input, output, session) {
     mod <- lm(Y~X, data=correct2)
     simplES <- mod$coefficients[2]
     cor <- lm.beta(mod)
-    BESD <- cor*100/2+50
+    CLES <- asin(sqrt(cor))/pi + .5
     NNT <- pi / (atan((abs(cor)/sqrt(1-(cor^2)))) + asin(cor))
     r2 <- summary(mod)$r.squared
 
-    list("Unstandardized regression coefficient" = simplES, Correlation = cor, BESD = BESD, NNT=NNT, r2 = r2)
+    list("Unstandardized regression coefficient" = simplES, Correlation = cor, CLES = CLES, NNT=NNT, r2 = r2)
   })
 
   output$Scatterplot <- renderPlot({
@@ -438,24 +438,20 @@ server <- function(input, output, session) {
   })
 
   output$metrics_output_c <- renderText({
-    m <- metrics_c()
     paste(
       "Correlation effect sizes:",
       "",
-      sprintf("1. Unstandardized Regression Coefficient: %.2f", m[["Unstandardized regression coefficient"]]),
-      sprintf("   Interpretation: A one-unit increase in the predictor (X) is associated with an expected change of %.2f units in the outcome (Y), holding all other variables constant.", m[["Unstandardized regression coefficient"]]),
+      sprintf("1. Unstandardized Regression Coefficient: %.2f", metrics_c()[["Unstandardized regression coefficient"]]),
+      sprintf("   Interpretation: A one-unit increase in the predictor (X) is associated with an expected change of %.2f units in the outcome (Y), holding all other variables constant.", metrics_c()[["Unstandardized regression coefficient"]]),
       "",
-      sprintf("2. Correlation: %.2f", m[["Correlation"]]),
-      sprintf("   Interpretation: The correlation of %.2f indicates the strength and direction of the linear relationship between X and Y, with values closer to 1 or -1 indicating a stronger relationship.", m[["Correlation"]]),
+      sprintf("2. Correlation: %.2f", metrics_c()[["Correlation"]]),
+      sprintf("   Interpretation: The correlation of %.2f indicates the strength and direction of the linear relationship between X and Y, with values closer to 1 or -1 indicating a stronger relationship.", metrics_c()[["Correlation"]]),
       "",
-      sprintf("3. R-squared: %.2f", m[["r2"]]),
-      sprintf("   Interpretation: R-squared of %.2f represents the proportion of variance in the dependent variable that is explained by the regression model.", m[["r2"]]),
+      sprintf("3. R-squared: %.2f", metrics_c()[["r2"]]),
+      sprintf("   Interpretation: R-squared of %.2f represents the proportion of variance in the dependent variable that is explained by the regression model.", metrics_c()[["r2"]]),
       "",
-      sprintf("4. BESD: %.2f", m[["BESD"]]),
-      sprintf(
-        "   Interpretation: Based on the predictor, %.2f%% of individuals in the treatment group succeed compared to %.2f%% in the control group, reflecting the strength of the predictor's effect.",
-        m[["BESD"]], 100 - m[["BESD"]]
-      ),
+      sprintf("4. Dunlap CLES: %.2f", metrics_c()[["CLES"]]),
+      sprintf("   Interpretation: Based on the Dunlap CLES, there is a %.2f%% chance that in a pair of randomly selected people, the participant with the higher score on one variable will also have a higher score on the other variable.", metrics_c()[["CLES"]] * 100),
       sep = "\n"
     )
   })
