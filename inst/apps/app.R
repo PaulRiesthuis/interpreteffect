@@ -30,7 +30,6 @@ ui <- navbarPage(
       ),
       mainPanel(
         plotOutput("distribution_plot"),
-        h3("Metrics"),
         verbatimTextOutput("metrics_output")
       )
     )
@@ -53,7 +52,6 @@ ui <- navbarPage(
       ),
       mainPanel(
         plotOutput("distribution_plot_w"),
-        h3("Metrics_w"),
         verbatimTextOutput("metrics_output_w")
       )
     )
@@ -76,7 +74,6 @@ ui <- navbarPage(
       ),
       mainPanel(
         plotOutput("Scatterplot"),
-        h3("Metrics_c"),
         verbatimTextOutput("metrics_output_c")
       )
     )
@@ -352,7 +349,6 @@ server <- function(input, output, session) {
       "",
       sprintf("2. Cohen's dz: %.2f", m[["Cohen's dz"]]),
       "   Interpretation: Participants in group 2 have, on average, %.2f standard deviations more than participants in the group 1",
-      "",
       "",
       sprintf("3. t2 >= t1 Proportion: %.2f", m[["t2 >= t1"]]),
       "   Interpretation: The proportion of cases where t2 is greater than or equal to t1, adjusted for the SESOI.",
