@@ -154,7 +154,7 @@ server <- function(input, output, session) {
       y2 <- dnorm(x, mean2, sd2)
 
       plot(x, y1, type = "l", col = "blue", lwd = 2, ylim = c(0, max(y1, y2)),
-           xlab = "Value", ylab = "Density", main = "Group Distributions")
+           xlab = "Value", ylab = "Density")
       lines(x, y2, col = "red", lwd = 2)
       legend("topright", legend = c("Group 1", "Group 2"),
              col = c("blue", "red"), lwd = 2)
@@ -188,10 +188,9 @@ server <- function(input, output, session) {
         labs(
           x = "Group",
           y = "Value",
-          title = "Dotplot of Group Distributions"
         ) +
         ylim(y_min, y_max) + # Adjust Y-axis limits
-        theme_barbie() +
+        theme_classic() +
         theme(
           plot.title = element_text(hjust = 0.5), # Center align the title
           axis.title.x = element_text(size = 14),
@@ -283,7 +282,7 @@ server <- function(input, output, session) {
       y2 <- dnorm(x, mean2, sd2)
 
       plot(x, y1, type = "l", col = "blue", lwd = 2, ylim = c(0, max(y1, y2)),
-           xlab = "Value", ylab = "Density", main = "Group Distributions")
+           xlab = "Value", ylab = "Density")
       lines(x, y2, col = "red", lwd = 2)
       legend("topright", legend = c("Group 1", "Group 2"),
              col = c("blue", "red"), lwd = 2)
@@ -326,10 +325,9 @@ server <- function(input, output, session) {
         labs(
           x = "Group",
           y = "Value",
-          title = "Dotplot of Group Distributions"
         ) +
         ylim(y_min, y_max) + # Adjust Y-axis limits
-        theme_barbie() +
+        theme_classic() +
         theme(
           plot.title = element_text(hjust = 0.5), # Center align the title
           axis.title.x = element_text(size = 14),
@@ -423,21 +421,19 @@ server <- function(input, output, session) {
         geom_point(alpha = 0.6) +
         geom_smooth(method = "lm", se = TRUE, color = "red") +
         labs(
-          title = "Simulated Data with Custom Slope",
           x = "Predictor (X)",
           y = "Outcome (Y)"
         ) +
-        theme_barbie()
+        theme_classic()
     } else if(input$line_type == "LOESS") {
       ggplot(correct2, aes(x = X, y = Y)) +
         geom_point(alpha = 0.6) +
         geom_smooth(method = "loess", se = TRUE, color = "red") +
         labs(
-          title = "Simulated Data with Custom Slope",
           x = "Predictor (X)",
           y = "Outcome (Y)"
         ) +
-        theme_barbie()}
+        theme_classic()}
   })
 
   output$metrics_output_c <- renderText({
@@ -491,27 +487,26 @@ server <- function(input, output, session) {
     data <- logistic_data()
 
     if (input$graph_type_log == "dotplot") {
-      ggplot(data, aes(x = as.factor(group), y = y, color = as.factor(y))) +  # Use group instead of x
+      ggplot(data, aes(x = as.factor(group), y = y, color = as.factor(y))) +
         geom_jitter(alpha = 0.6, position = position_jitter(width = 0.1, height = 0.1)) +
         scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 1), labels = c("Fail", "Success")) +
+        scale_x_discrete(labels = c("1" = "Group 1", "2" = "Group 2")) +
         labs(
-          title = "Logistic Regression: Predicted Probabilities",
           x = "Group",
           y = "Predicted Probability",
           color = "Observed Outcome"
         ) +
-        theme_barbie()
+        theme_classic()
     } else if (input$graph_type_log == "bargraph") {
       ggplot(data, aes(x = as.factor(group), fill = as.factor(y))) +
         geom_bar(position = "fill") +  # Stacked bars, scaled to proportions
         scale_y_continuous(labels = scales::percent_format()) +  # Convert to percentages
         labs(
-          title = "Logistic Regression: Proportion of Successes and Failures",
           x = "Group",
           y = "Proportion",
           fill = "Outcome"
         ) +
-        theme_minimal()}
+        theme_classic()}
   })
 
   # Logistic Regression Performance Metrics
@@ -603,20 +598,20 @@ server <- function(input, output, session) {
     if (input$graph_type == "dotplot"){
       ggplot(data, aes(x = group, y = counts, fill = group)) +
         geom_dotplot(binaxis = "y", stackdir = "center", dotsize = 0.25, binwidth = 1, alpha = 0.6) +
-        scale_x_discrete(labels = c("Group 0", "Group 1")) +
-        labs(title = "Poisson Regression: Dot Plot of Observed Counts by Group",
-             x = "Group",
+        scale_x_discrete(labels = c("Group 1", "Group 2")) +
+        labs(x = "Group",
              y = "Event Counts") +
-        theme_barbie() +
+        theme_classic() +
         theme(legend.position = "none")
     } else if (input$graph_type == "histogram"){
       ggplot(data, aes(counts, fill = group)) +
         geom_histogram(binwidth=.5, position="dodge")+
-        labs(title = "Poisson Regression: Histogram Counts by Group",
-             y = "Frequency",
-             x = "Event counts") +
+        labs(y = "Frequency",
+             x = "Event counts",
+             fill = NULL) +
         scale_y_continuous(expand = expansion(mult = c(0, 1)))+
-        theme_barbie()
+        scale_fill_discrete(labels = c("0" = "Group 1", "1" = "Group 2")) +
+        theme_classic()
     }
   })
 
