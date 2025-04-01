@@ -131,15 +131,15 @@ server <- function(input, output, session) {
     sd2 <- input$sd2
     n2 <- input$n2
     CER <- input$CER
-
+    mean_dif <- mean2 - mean1
     pooled_sd <- sqrt((sd1^2 + sd2^2) / 2)
-    cohend <- (mean2 - mean1) / pooled_sd
+    cohend <- mean_dif / pooled_sd
     auc <- pnorm(cohend / sqrt(2))
     nnt <- 1 / (pnorm(cohend + qnorm(CER/100)) - CER/100)
     nnt_nnh_label <- ifelse(nnt > 0, "Number Needed to Treat (NNT)", "Number Needed to Harm (NNH)")
 
 
-    list("Cohen's d" = cohend, AUC = auc, NNT = abs(nnt), nnt_nnh_label = nnt_nnh_label)
+    list(mean_dif = mean_dif, "Cohen's d" = cohend, AUC = auc, NNT = abs(nnt), nnt_nnh_label = nnt_nnh_label)
   })
 
   output$distribution_plot <- renderPlot({
@@ -209,13 +209,16 @@ server <- function(input, output, session) {
     paste(
       "Between subject effect sizes:",
       "",
-      sprintf("1. Cohen's d: %.2f", m[["Cohen's d"]]),
-      "   Interpretation: Cohen's d represents the standardized mean difference.",
+      sprintf("1. Raw mean difference: %.2f", m[["mean_dif"]]),
+      "   Interpretation: Participants in group 2 have, on average, %.2f points more than participants in the group 1",
       "",
-      sprintf("2. AUC: %.2f", m[["AUC"]]),
-      "   Interpretation: AUC (Area Under the Curve) reflects the probability that a randomly chosen individual from Group 2 has a higher value than a randomly chosen individual from Group 1. Values closer to 1 indicate strong discrimination.",
+      sprintf("2. Cohen's d: %.2f", m[["Cohen's d"]]),
+      "   Interpretation: Participants in group 2 have, on average, %.2f standard deviations more than participants in the group 1",
       "",
-      sprintf("3. %s: %.2f", m[["nnt_nnh_label"]], m[["NNT"]]),
+      sprintf("3. Probability of superiority (AUC): %.2f", m[["AUC"]]),
+      "   Interpretation: The probability of superiority (Area Under the Curve) reflects the probability that a randomly chosen individual from Group 2 has a higher value than a randomly chosen individual from Group 1. Values closer to 1 indicate strong discrimination.",
+      "",
+      sprintf("4. %s: %.2f", m[["nnt_nnh_label"]], m[["NNT"]]),
       interpretation <- if (m[["nnt_nnh_label"]] == "Number Needed to Treat (NNT)") {
         sprintf("   Interpretation: The %s of %.2f means that on average, %.2f individuals need to be treated to have one additional success in Group 2 compared to Group 1.", m[["nnt_nnh_label"]], m[["NNT"]], m[["NNT"]])
       } else {
@@ -248,9 +251,9 @@ server <- function(input, output, session) {
       id = "participants",                         # Identifier for data points
       plot = FALSE
     )
-
+    mean_dif <- mean2-mean1
     pooled_sd_w <- sqrt(sd1^2 + sd2^2 - 2 * r *sd1 * sd2)
-    cohend_w <- (mean2-mean1)/pooled_sd_w
+    cohend_w <- mean_dif/pooled_sd_w
     auc_w <- pnorm(cohend_w/sqrt(2))
     correct2$direction <- ifelse(
       (correct2$t2 - correct2$t1) > SESOI, "greater",
@@ -263,7 +266,7 @@ server <- function(input, output, session) {
     smaller <- mean(correct2$direction == "smaller")
     equal <- mean(correct2$direction == "equivalent")
 
-    list("Cohen's dz" = cohend_w, "t2 >= t1" = greater, "t2 <= t1" = smaller, "t2 = t1" = equal, AUC = auc_w)
+    list(mean_dif = mean_dif, "Cohen's dz" = cohend_w, "t2 >= t1" = greater, "t2 <= t1" = smaller, "t2 = t1" = equal, AUC = auc_w)
   })
 
   output$distribution_plot_w <- renderPlot({
@@ -344,20 +347,24 @@ server <- function(input, output, session) {
     paste(
       "Within subject effect sizes:",
       "",
-      sprintf("1. Cohen's dz: %.2f", m[["Cohen's dz"]]),
-      "   Interpretation: Cohen's dz is the standardized mean difference for paired samples.",
+      sprintf("1. Raw mean difference: %.2f", m[["mean_dif"]]),
+      "   Interpretation: Participants in group 2 have, on average, %.2f points more than participants in the group 1",
       "",
-      sprintf("2. t2 >= t1 Proportion: %.2f", m[["t2 >= t1"]]),
+      sprintf("2. Cohen's dz: %.2f", m[["Cohen's dz"]]),
+      "   Interpretation: Participants in group 2 have, on average, %.2f standard deviations more than participants in the group 1",
+      "",
+      "",
+      sprintf("3. t2 >= t1 Proportion: %.2f", m[["t2 >= t1"]]),
       "   Interpretation: The proportion of cases where t2 is greater than or equal to t1, adjusted for the SESOI.",
       "",
-      sprintf("3. t2 <= t1 Proportion: %.2f", m[["t2 <= t1"]]),
+      sprintf("4. t2 <= t1 Proportion: %.2f", m[["t2 <= t1"]]),
       "   Interpretation: The proportion of cases where t2 is less than or equal to t1, adjusted for the SESOI.",
       "",
-      sprintf("4. t2 = t1 Proportion: %.2f", m[["t2 = t1"]]),
+      sprintf("5. t2 = t1 Proportion: %.2f", m[["t2 = t1"]]),
       "   Interpretation: The proportion of cases where t2 and t1 are equivalent within the SESOI range.",
       "",
-      sprintf("5. AUC: %.2f", m[["AUC"]]),
-      sprintf("   Interpretation: The AUC (Area Under the Curve) of %.2f indicates the probability that a randomly chosen individual from t2 has a higher value than a randomly chosen individual from t1.", m[["AUC"]]),
+      sprintf("6. Probability of superiority (AUC): %.2f", m[["AUC"]]),
+      sprintf("   Interpretation: The probability of superiority (Area Under the Curve) of %.2f indicates the probability that a randomly chosen individual from t2 has a higher value than a randomly chosen individual from t1.", m[["AUC"]]),
       sep = "\n"
     )
   })
