@@ -390,7 +390,7 @@ server <- function(input, output, session) {
     mod <- lm(Y~X, data=correct2)
     simplES <- mod$coefficients[2]
     cor <- lm.beta(mod)
-    CLES <- asin(sqrt(cor))/pi + .5
+    CLES <- asin(sqrt(r))/pi + .5
     NNT <- pi / (atan((abs(cor)/sqrt(1-(cor^2)))) + asin(cor))
     r2 <- summary(mod)$r.squared
 
