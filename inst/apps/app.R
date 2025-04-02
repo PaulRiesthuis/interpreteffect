@@ -10,7 +10,7 @@ library(margins)
 
 
 ui <- navbarPage(
-  "Interpret Effect sizes",
+  "Interpret effect sizes",
   # Page 1: Group Distributions and Metrics
   tabPanel(
     "Between subject design",
