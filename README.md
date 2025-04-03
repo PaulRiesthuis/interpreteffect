@@ -16,7 +16,7 @@ You can install the development version of interpreteffect from
 
 ``` r
 # Install interpreteffect from GitHub
-remotes::install_github("PaulRiesthuis/interpreteffect")
+devtools::install_github("PaulRiesthuis/interpreteffect")
 ```
 
 ## Running the Shiny App
