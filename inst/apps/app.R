@@ -443,7 +443,7 @@ server <- function(input, output, session) {
       sprintf("1. Unstandardized Regression Coefficient: %.2f", metrics_c()[["Unstandardized regression coefficient"]]),
       sprintf("   Interpretation: A one-unit increase in the predictor (X) is associated with an expected change of %.2f units in the outcome (Y), holding all other variables constant.", metrics_c()[["Unstandardized regression coefficient"]]),
       "",
-      sprintf("2. Correlation: %.2f", metrics_c()[["Correlation"]]),
+      sprintf("2. Correlation (of simulated data; might not equal the given correlation): %.2f", metrics_c()[["Correlation"]]),
       sprintf("   Interpretation: The correlation of %.2f indicates the strength and direction of the linear relationship between X and Y, with values closer to 1 or -1 indicating a stronger relationship.", metrics_c()[["Correlation"]]),
       "",
       sprintf("3. R-squared: %.2f", metrics_c()[["r2"]]),
