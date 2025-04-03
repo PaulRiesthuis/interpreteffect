@@ -5,7 +5,7 @@ account: paulriesthuis
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 14398197
-bundleId: 10049756
+bundleId: 10050035
 url: https://paulriesthuis.shinyapps.io/interpreteffect/
 version: 1
 asMultiple: FALSE

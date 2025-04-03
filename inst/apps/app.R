@@ -62,10 +62,10 @@ ui <- navbarPage(
     titlePanel("Compare Two Groups with Distributions"),
     sidebarLayout(
       sidebarPanel(
-        numericInput("mean1_c", "Group 1 Mean:", value = 5),
-        numericInput("sd1_c", "Group 1 SD:", value = 2),
-        numericInput("mean2_c", "Group 2 Mean:", value = 6.6),
-        numericInput("sd2_c", "Group 2 SD:", value = 2),
+        numericInput("mean1_c", "Variable 1 Mean:", value = 5),
+        numericInput("sd1_c", "Variable 1 SD:", value = 2),
+        numericInput("mean2_c", "Variable 2 Mean:", value = 6.6),
+        numericInput("sd2_c", "Variable 2 SD:", value = 2),
         numericInput("r_c", "Correlation", value = .5, min = -.99, max= .99, step=.01),
         numericInput("N_c", "Sample Size:", value = 30),
         radioButtons("line_type", "Select line type:",
